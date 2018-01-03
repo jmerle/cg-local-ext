@@ -1,6 +1,6 @@
 {
   "name": "cg-local-ext",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A WebExtension which helps to synchronize the CodinGame IDE with a local file.",
   "repository": "https://github.com/jmerle/cg-local-ext",
   "author": "Jasper van Merle",
