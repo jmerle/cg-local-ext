@@ -1,4 +1,8 @@
 # CG Local Extension
+
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ihakjfajoihlncbnggmcmmeabclpfdgo.svg)](https://chrome.google.com/webstore/detail/cg-local/ihakjfajoihlncbnggmcmmeabclpfdgo)
+[![Mozilla Add-on](https://img.shields.io/amo/v/cg-local.svg)](https://addons.mozilla.org/en-US/firefox/addon/cg-local/)
+
 A WebExtension which helps to synchronize the CodinGame IDE with a local file. Has to be used in combination with [cg-local-app](https://github.com/jmerle/cg-local-app), which takes care of the file watching.
 
 ## Packaging
