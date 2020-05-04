@@ -88,10 +88,10 @@
     }
   },
   "lint-staged": {
-    "*.ts": [
+    "*.{ts,js}": [
       "eslint --format codeframe --fix"
     ],
-    "*.{js,yml,json}": [
+    "*.{yml,json}": [
       "prettier --write"
     ]
   },
