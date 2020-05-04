@@ -1,6 +1,6 @@
 import { browser, Runtime } from 'webextension-polyfill-ts';
 import { WebSocketPort } from '../constants';
-import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../utils/extension-messaging';
+import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../extension-messaging';
 import { ApplicationMessage, ApplicationMessageAction } from './application-messaging';
 
 let ws: WebSocket = null;

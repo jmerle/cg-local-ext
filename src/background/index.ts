@@ -1,5 +1,5 @@
 import { browser, Runtime, Tabs } from 'webextension-polyfill-ts';
-import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../utils/extension-messaging';
+import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../extension-messaging';
 import { initApplication } from './application';
 
 function checkTab(tabId: number, changeInfo: any, tab: Tabs.Tab): void {
