@@ -1,5 +1,6 @@
 # CG Local Extension
 
+[![Build Status](https://dev.azure.com/jmerle/cg-local-ext/_apis/build/status/Build?branchName=master)](https://dev.azure.com/jmerle/cg-local-ext/_build/latest?definitionId=31&branchName=master)  
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ihakjfajoihlncbnggmcmmeabclpfdgo.svg)](https://chrome.google.com/webstore/detail/cg-local/ihakjfajoihlncbnggmcmmeabclpfdgo)
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/ihakjfajoihlncbnggmcmmeabclpfdgo.svg)](https://chrome.google.com/webstore/detail/cg-local/ihakjfajoihlncbnggmcmmeabclpfdgo)  
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/cg-local.svg)](https://addons.mozilla.org/en-US/firefox/addon/cg-local/)
