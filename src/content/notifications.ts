@@ -1,7 +1,7 @@
-function createElement(html: string): HTMLElement {
+function createDiv(...classes: string[]): HTMLElement {
   const div = document.createElement('div');
-  div.innerHTML = html;
-  return div.firstElementChild as HTMLElement;
+  div.classList.add(...classes);
+  return div;
 }
 
 function fadeOut(parent: HTMLElement, child: HTMLElement): void {
@@ -22,7 +22,7 @@ function fadeOut(parent: HTMLElement, child: HTMLElement): void {
 }
 
 function notify(message: string, type: string, isPersistent: boolean): void {
-  const notification = createElement(`
+  /*
     <div class="instant-message ${type}">
       <div class="instant-message-inner">
         <div class="instant-message-image">
@@ -37,7 +37,34 @@ function notify(message: string, type: string, isPersistent: boolean): void {
         <button type="button" class="close-button"></button>
       </div>
     </div>
-  `);
+  */
+
+  const notification = createDiv('instant-message', type);
+
+  const notificationInner = createDiv('instant-message-inner');
+
+  const notificationImage = createDiv('instant-message-image');
+  notificationImage.appendChild(createDiv('placeholder'));
+
+  const notificationContent = createDiv('instant-message-content');
+
+  const notificationTitle = createDiv('title');
+  notificationTitle.textContent = 'CG Local';
+
+  const notificationMessage = createDiv('subtitle');
+  notificationMessage.textContent = message;
+
+  notificationContent.appendChild(notificationTitle);
+  notificationContent.appendChild(notificationMessage);
+
+  const closeButton = document.createElement('button');
+  closeButton.classList.add('close-button');
+
+  notificationInner.appendChild(notificationImage);
+  notificationInner.appendChild(notificationContent);
+  notificationInner.appendChild(closeButton);
+
+  notification.appendChild(notificationInner);
 
   const notificationsPanel = document.getElementById('instant-messages');
 
@@ -51,9 +78,7 @@ function notify(message: string, type: string, isPersistent: boolean): void {
     }
   };
 
-  const closeButton = notification.getElementsByClassName('close-button')[0];
   closeButton.addEventListener('click', hide);
-
   notificationsPanel.appendChild(notification);
 
   if (!isPersistent) {
