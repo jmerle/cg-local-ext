@@ -47,6 +47,7 @@ function init(): void {
 
   editor.on(EditorEventType.ConnectExternal, connect);
   editor.on(EditorEventType.DisconnectExternal, disconnect);
+
   editor.on(EditorEventType.CodeUpdated, data => {
     sendToBackground(ExtensionMessageAction.Code, data);
   });
