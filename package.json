@@ -1,7 +1,7 @@
 {
   "name": "cg-local-ext",
   "productName": "CG Local",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Synchronizes the CodinGame IDE with a local file so you can use your own editor.",
   "repository": "https://github.com/jmerle/cg-local-ext",
   "author": "Jasper van Merle",

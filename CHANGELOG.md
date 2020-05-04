@@ -1,4 +1,4 @@
-# 1.1.0 - TBD
+# 1.1.0 - May 5th, 2020
 - Removed the usage of innerHTML
 - Fixed a bug where the extension would not disconnect from the CG Local application when moving away from CodinGame while being connected to the application
 
