@@ -2,16 +2,16 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
 
-// There are no types for this package
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+function transformManifest(content: Buffer): string {
+  const manifest = JSON.parse(content.toString());
 
-function transformManifest(content: string): string {
-  const manifest = JSON.parse(content);
-
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const packageData = require('./package.json');
 
   manifest.version = packageData.version;
   manifest.author = packageData.author;
+
+  // eslint-disable-next-line @typescript-eslint/camelcase
   manifest.homepage_url = packageData.repository;
 
   return JSON.stringify(manifest, null, 2);
@@ -19,8 +19,8 @@ function transformManifest(content: string): string {
 
 const config = {
   entry: {
-    content: path.resolve(__dirname, 'src/content/index.ts'),
     background: path.resolve(__dirname, 'src/background/index.ts'),
+    content: path.resolve(__dirname, 'src/content/index.ts'),
   },
   output: {
     filename: '[name].js',
@@ -28,6 +28,12 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+  },
+  optimization: {
+    minimize: false,
+  },
+  performance: {
+    hints: false,
   },
   module: {
     rules: [
@@ -40,15 +46,21 @@ const config = {
       },
       {
         test: /\.js$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader',
-        }
+        loader: 'string-replace-loader',
+        options: {
+          multiple: [
+            {
+              search: 'sourceMappingURL',
+              replace: 'disabledSourceMappingURL',
+            },
+          ],
+        },
       },
     ],
   },
   plugins: [
     new webpack.DefinePlugin({
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       packageData: JSON.stringify(require('./package.json')),
     }),
     new CopyWebpackPlugin([
@@ -62,12 +74,11 @@ const config = {
         to: path.resolve(__dirname, 'build/icons'),
       },
       {
-        from: path.resolve(__dirname, 'src/vendor/browser-polyfill.js'),
-        to: path.resolve(__dirname, 'build/js'),
+        from: path.resolve(__dirname, 'LICENSE'),
+        to: path.resolve(__dirname, 'build'),
       },
     ]),
-    new UglifyJsPlugin(),
-  ]
+  ],
 };
 
 export default config;

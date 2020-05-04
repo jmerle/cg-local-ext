@@ -1,3 +1,5 @@
+import { browser } from 'webextension-polyfill-ts';
+
 export interface ExtensionMessage {
   action: ExtensionMessageAction;
   payload: any;
@@ -19,13 +21,13 @@ export enum ExtensionMessageAction {
   UpdateCode,
   SendCode,
   Code,
-  SetReadOnly
+  SetReadOnly,
 }
 
-export function sendToContent(tabId: number, action: ExtensionMessageAction, payload: any = {}) {
+export function sendToContent(tabId: number, action: ExtensionMessageAction, payload: any = {}): void {
   browser.tabs.sendMessage(tabId, { action, payload });
 }
 
-export function sendToBackground(action: ExtensionMessageAction, payload: any = {}) {
+export function sendToBackground(action: ExtensionMessageAction, payload: any = {}): void {
   browser.runtime.sendMessage({ action, payload });
 }

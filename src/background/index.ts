@@ -1,10 +1,8 @@
-import Tab = browser.tabs.Tab;
-import MessageSender = browser.runtime.MessageSender;
-import { ExtensionMessage, ExtensionMessageAction, sendToContent } from "../utils/extension-messaging";
-import { hidePageAction, showPageAction } from "./page-action";
-import initApplication from "./application";
+import { browser, Runtime, Tabs } from 'webextension-polyfill-ts';
+import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../utils/extension-messaging';
+import { initApplication } from './application';
 
-function checkTab(tabId: number, changeInfo: any, tab: Tab) {
+function checkTab(tabId: number, changeInfo: any, tab: Tabs.Tab): void {
   const isIDE = tab.url.includes('https://www.codingame.com/ide/');
   const isFileServlet = tab.url.includes('https://www.codingame.com/ide/fileservlet?id');
 
@@ -13,24 +11,24 @@ function checkTab(tabId: number, changeInfo: any, tab: Tab) {
       sendToContent(tab.id, ExtensionMessageAction.InitContent);
     }
   } else {
-    hidePageAction(tab.id);
+    browser.pageAction.hide(tab.id);
     sendToContent(tab.id, ExtensionMessageAction.DisposeContent);
   }
 }
 
-function handlePageActionClick(tab: Tab) {
+function handlePageActionClick(tab: Tabs.Tab): void {
   sendToContent(tab.id, ExtensionMessageAction.PageActionClicked);
 }
 
-function handleMessage(message: ExtensionMessage, sender: MessageSender) {
+function handleMessage(message: ExtensionMessage, sender: Runtime.MessageSender): void {
   if (!sender.tab) return;
 
   switch (message.action) {
     case ExtensionMessageAction.ShowPageAction:
-      showPageAction(sender.tab.id);
+      browser.pageAction.show(sender.tab.id);
       break;
     case ExtensionMessageAction.HidePageAction:
-      hidePageAction(sender.tab.id);
+      browser.pageAction.hide(sender.tab.id);
       break;
   }
 }

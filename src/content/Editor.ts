@@ -1,19 +1,26 @@
-import { EventEmitter } from "eventemitter3";
-import { isFirefox } from "../utils/browsers";
+import { EventEmitter } from 'eventemitter3';
 
 declare global {
   function cloneInto(obj: any, target: any, options?: any): void;
 }
 
-export default class Editor extends EventEmitter {
-  constructor() {
+export enum EditorEventType {
+  ConnectExternal = 'connect',
+  DisconnectExternal = 'disconnect',
+  QuestionDetails = 'questionDetails',
+  CodeUpdated = 'updateCode',
+  Submitted = 'submitted',
+}
+
+export class Editor extends EventEmitter {
+  public constructor() {
     super();
 
     this.handleEvent = this.handleEvent.bind(this);
     window.document.addEventListener('IDEToExternalEditor', this.handleEvent);
   }
 
-  handleEvent(ev: Event) {
+  private handleEvent(ev: Event): void {
     const detail = (ev as CustomEvent).detail;
 
     switch (detail.status) {
@@ -40,52 +47,44 @@ export default class Editor extends EventEmitter {
     }
   }
 
-  dispose() {
+  public dispose(): void {
     window.document.removeEventListener('IDEToExternalEditor', this.handleEvent);
   }
 
-  registerExternal(name: string, version: string) {
+  public registerExternal(name: string, version: string): void {
     this.emitToEditor('status', { name, version });
   }
 
-  setReadOnly(state: boolean) {
+  public setReadOnly(state: boolean): void {
     this.emitToEditor('setReadOnly', { value: state });
   }
 
-  setSynchronized(state: boolean) {
+  public setSynchronized(state: boolean): void {
     this.emitToEditor('synchronized', { value: state });
   }
 
-  setCode(code: string) {
+  public setCode(code: string): void {
     this.emitToEditor('updateCode', {
       code: code.replace(/\r\n|\r/g, '\n'),
     });
   }
 
-  getCode() {
+  public getCode(): void {
     this.emitToEditor('getCode');
   }
 
-  play() {
+  public play(): void {
     this.emitToEditor('play');
   }
 
-  emitToEditor(event: string, data: any = {}) {
+  private emitToEditor(event: string, data: any = {}): void {
     data.status = event;
 
-    if (isFirefox()) {
+    if (window.navigator.userAgent.toLowerCase().includes('firefox')) {
       data = cloneInto(data, window);
     }
 
     const ev = new CustomEvent('ExternalEditorToIDE', { detail: data });
     window.document.dispatchEvent(ev);
   }
-}
-
-export enum EditorEventType {
-  ConnectExternal = 'connect',
-  DisconnectExternal = 'disconnect',
-  QuestionDetails = 'questionDetails',
-  CodeUpdated = 'updateCode',
-  Submitted = 'submitted',
 }

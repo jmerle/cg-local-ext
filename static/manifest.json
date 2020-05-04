@@ -26,12 +26,12 @@
   "content_scripts": [
     {
       "matches": ["https://www.codingame.com/*"],
-      "js": ["js/browser-polyfill.js", "js/content.js"]
+      "js": ["js/content.js"]
     }
   ],
 
   "background": {
-    "scripts": ["js/browser-polyfill.js", "js/background.js"]
+    "scripts": ["js/background.js"]
   },
 
   "page_action": {

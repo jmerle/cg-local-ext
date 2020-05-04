@@ -1,36 +1,19 @@
-import { WebSocketPort } from "../constants";
-import { ExtensionMessage, ExtensionMessageAction, sendToContent } from "../utils/extension-messaging";
-import { ApplicationMessage, ApplicationMessageAction } from "./application-messaging";
-import MessageSender = browser.runtime.MessageSender;
+import { browser, Runtime } from 'webextension-polyfill-ts';
+import { WebSocketPort } from '../constants';
+import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../utils/extension-messaging';
+import { ApplicationMessage, ApplicationMessageAction } from './application-messaging';
 
 let ws: WebSocket = null;
 let connectedTabId: number = null;
 
-function connect(tabId: number) {
-  if (ws === null) {
-    ws = new WebSocket(`ws://localhost:${WebSocketPort}/`);
-
-    ws.onmessage = onMessage;
-    ws.onclose = onClose;
-
-    connectedTabId = tabId;
-  } else {
-    sendToContent(tabId, ExtensionMessageAction.Error, {
-      message: 'CG Local is already in use by another browser tab.',
-    });
-
-    sendToContent(tabId, ExtensionMessageAction.AppDisconnected);
-  }
-}
-
-function disconnect() {
+function disconnect(): void {
   if (ws !== null) {
     ws.close(1000);
     ws = null;
   }
 }
 
-function onMessage(event: MessageEvent) {
+function onMessage(event: MessageEvent): void {
   const msg: ApplicationMessage = JSON.parse(event.data);
 
   switch (msg.action) {
@@ -63,7 +46,7 @@ function onMessage(event: MessageEvent) {
   }
 }
 
-function onClose(event: CloseEvent) {
+function onClose(event: CloseEvent): void {
   sendToContent(connectedTabId, ExtensionMessageAction.AppDisconnected);
 
   if (event.code !== 1000) {
@@ -75,11 +58,28 @@ function onClose(event: CloseEvent) {
   ws = null;
 }
 
-function send(action: ApplicationMessageAction, payload: any = {}) {
+function connect(tabId: number): void {
+  if (ws === null) {
+    ws = new WebSocket(`ws://localhost:${WebSocketPort}/`);
+
+    ws.onmessage = onMessage;
+    ws.onclose = onClose;
+
+    connectedTabId = tabId;
+  } else {
+    sendToContent(tabId, ExtensionMessageAction.Error, {
+      message: 'CG Local is already in use by another browser tab.',
+    });
+
+    sendToContent(tabId, ExtensionMessageAction.AppDisconnected);
+  }
+}
+
+function send(action: ApplicationMessageAction, payload: any = {}): void {
   ws.send(JSON.stringify({ action, payload }));
 }
 
-function handleMessage(message: ExtensionMessage, sender: MessageSender) {
+function handleMessage(message: ExtensionMessage, sender: Runtime.MessageSender): void {
   if (!sender.tab) return;
 
   switch (message.action) {
@@ -100,13 +100,13 @@ function handleMessage(message: ExtensionMessage, sender: MessageSender) {
   }
 }
 
-function handleTabClosed(tabId: number, removeInfo: any) {
+function handleTabClosed(tabId: number): void {
   if (connectedTabId === tabId) {
     disconnect();
   }
 }
 
-export default function initApplication() {
+export function initApplication(): void {
   browser.runtime.onMessage.addListener(handleMessage);
   browser.tabs.onRemoved.addListener(handleTabClosed);
 }

@@ -1,7 +1,7 @@
-import Editor, { EditorEventType } from "./Editor";
-import { ExtensionMessage, ExtensionMessageAction, sendToBackground } from "../utils/extension-messaging";
-import { error } from "./notifications";
-import MessageSender = browser.runtime.MessageSender;
+import { browser, Runtime } from 'webextension-polyfill-ts';
+import { ExtensionMessage, ExtensionMessageAction, sendToBackground } from '../utils/extension-messaging';
+import { Editor, EditorEventType } from './Editor';
+import { error } from './notifications';
 
 declare global {
   const packageData: any;
@@ -11,25 +11,25 @@ let canConnect = true;
 let editor: Editor = null;
 let questionDetails: any = null;
 
-function connect() {
+function connect(): void {
   if (canConnect) {
     canConnect = false;
     sendToBackground(ExtensionMessageAction.ConnectApp);
   }
 }
 
-function disconnect() {
+function disconnect(): void {
   sendToBackground(ExtensionMessageAction.DisconnectApp);
 }
 
-function onConnected() {
+function onConnected(): void {
   editor.setReadOnly(true);
   editor.setSynchronized(true);
 
   sendToBackground(ExtensionMessageAction.HidePageAction);
 }
 
-function onDisconnected() {
+function onDisconnected(): void {
   editor.setReadOnly(false);
   editor.setSynchronized(false);
 
@@ -37,7 +37,7 @@ function onDisconnected() {
   sendToBackground(ExtensionMessageAction.ShowPageAction);
 }
 
-function init() {
+function init(): void {
   editor = new Editor();
 
   editor.on(EditorEventType.QuestionDetails, data => {
@@ -56,7 +56,7 @@ function init() {
   sendToBackground(ExtensionMessageAction.ShowPageAction);
 }
 
-function dispose() {
+function dispose(): void {
   if (editor !== null) {
     disconnect();
     editor.dispose();
@@ -64,7 +64,7 @@ function dispose() {
   }
 }
 
-function handleMessage(message: ExtensionMessage, sender: MessageSender) {
+function handleMessage(message: ExtensionMessage, sender: Runtime.MessageSender): void {
   if (sender.tab) return;
 
   switch (message.action) {
