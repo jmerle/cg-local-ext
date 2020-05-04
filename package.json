@@ -1,7 +1,7 @@
 {
   "name": "cg-local-ext",
   "version": "1.0.1",
-  "description": "A WebExtension which helps to synchronize the CodinGame IDE with a local file.",
+  "description": "A browser extension which helps to synchronize the CodinGame IDE with a local file.",
   "repository": "https://github.com/jmerle/cg-local-ext",
   "author": "Jasper van Merle",
   "license": "MIT",
@@ -12,11 +12,11 @@
     "package": "yarn build && web-ext build -s build/ -a dist/ -o",
     "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:package",
     "lint:eslint": "eslint --format codeframe 'src/**'",
-    "lint:prettier": "prettier-check --ignore-path .gitignore '**/*.{ts,js,html,json}'",
+    "lint:prettier": "prettier-check --ignore-path .gitignore '**/*.{yml,json}'",
     "lint:package": "yarn build && web-ext lint -s build/ -o text",
     "fix": "yarn fix:eslint && yarn fix:prettier",
     "fix:eslint": "yarn lint:eslint --fix",
-    "fix:prettier": "prettier --write --ignore-path .gitignore '**/*.{ts,js,html,json}'",
+    "fix:prettier": "prettier --write --ignore-path .gitignore '**/*.{yml,json}'",
     "start:firefox": "web-ext run -s build/ --start-url https://www.codingame.com/ --pref devtools.browserconsole.filter.jswarn=false --pref devtools.webconsole.filter.warn=false",
     "start:chrome": "node scripts/chrome-launch",
     "dev:firefox": "yarn build && concurrently 'yarn start:firefox' 'yarn watch' -n web-ext,webpack -c blue,yellow --kill-others",
@@ -90,7 +90,7 @@
     "*.ts": [
       "eslint --format codeframe --fix"
     ],
-    "*.{yml,js,json}": [
+    "*.{js,yml,json}": [
       "prettier --write"
     ]
   },
