@@ -24,7 +24,7 @@
     "dev:chrome": "yarn build && concurrently 'yarn start:chrome' 'yarn watch' -n chrome,webpack -c blue,yellow --kill-others"
   },
   "dependencies": {
-    "webextension-polyfill-ts": "^0.15.0"
+    "webextension-polyfill-ts": "0.15.0"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "^5.0.0",
