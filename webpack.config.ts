@@ -8,6 +8,8 @@ function transformManifest(content: Buffer): string {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const packageData = require('./package.json');
 
+  manifest.name = packageData.productName;
+  manifest.description = packageData.description;
   manifest.version = packageData.version;
   manifest.author = packageData.author;
 

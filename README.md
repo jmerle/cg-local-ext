@@ -5,7 +5,7 @@
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/cg-local.svg)](https://addons.mozilla.org/en-US/firefox/addon/cg-local/)
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/cg-local.svg)](https://addons.mozilla.org/en-US/firefox/addon/cg-local/)
 
-A browser extension which helps to synchronize the CodinGame IDE with a local file. Has to be used in combination with [cg-local-app](https://github.com/jmerle/cg-local-app) which takes care of the file watching.
+A browser extension which helps in synchronizing the CodinGame IDE with a local file. Has to be used in combination with [cg-local-app](https://github.com/jmerle/cg-local-app) which takes care of the file watching. See the [CodinGame topic](https://www.codingame.com/forum/t/cg-local/10359/1) for more information.
 
 ## Mozilla Reviewers
 The information provided below is meant for Mozilla volunteers.

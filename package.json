@@ -1,7 +1,8 @@
 {
   "name": "cg-local-ext",
+  "productName": "CG Local",
   "version": "1.0.1",
-  "description": "A browser extension which helps synchronizing the CodinGame IDE with a local file.",
+  "description": "A browser extension which helps in synchronizing the CodinGame IDE with a local file.",
   "repository": "https://github.com/jmerle/cg-local-ext",
   "author": "Jasper van Merle",
   "license": "MIT",
