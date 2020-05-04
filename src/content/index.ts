@@ -59,7 +59,6 @@ function init(): void {
 
 function dispose(): void {
   if (editor !== null) {
-    disconnect();
     editor.dispose();
     editor = null;
   }
