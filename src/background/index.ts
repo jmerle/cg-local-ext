@@ -1,6 +1,6 @@
 import { browser, Runtime, Tabs } from 'webextension-polyfill-ts';
 import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../extension-messaging';
-import { disconnect, initApplication } from './application';
+import { initApplication } from './application';
 
 function checkTab(tabId: number, changeInfo: any, tab: Tabs.Tab): void {
   const isIDE = tab.url.includes('https://www.codingame.com/ide/');
@@ -13,7 +13,6 @@ function checkTab(tabId: number, changeInfo: any, tab: Tabs.Tab): void {
   } else {
     browser.pageAction.hide(tab.id);
     sendToContent(tab.id, ExtensionMessageAction.DisposeContent);
-    disconnect();
   }
 }
 

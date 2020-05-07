@@ -6,7 +6,7 @@ import { ApplicationMessage, ApplicationMessageAction } from './application-mess
 let ws: WebSocket = null;
 let connectedTabId: number = null;
 
-export function disconnect(): void {
+function disconnect(): void {
   if (ws !== null) {
     ws.close(1000);
     ws = null;
