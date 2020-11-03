@@ -1,6 +1,6 @@
 import * as path from 'path';
-import * as webpack from 'webpack';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
+import * as webpack from 'webpack';
 
 function transformManifest(content: Buffer): string {
   const manifest = JSON.parse(content.toString());
@@ -12,8 +12,6 @@ function transformManifest(content: Buffer): string {
   manifest.description = packageData.description;
   manifest.version = packageData.version;
   manifest.author = packageData.author;
-
-  // eslint-disable-next-line @typescript-eslint/camelcase
   manifest.homepage_url = packageData.repository;
 
   return JSON.stringify(manifest, null, 2);
@@ -65,21 +63,23 @@ const config = {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       packageData: JSON.stringify(require('./package.json')),
     }),
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, 'static/manifest.json'),
-        to: path.resolve(__dirname, 'build'),
-        transform: transformManifest,
-      },
-      {
-        from: path.resolve(__dirname, 'icons'),
-        to: path.resolve(__dirname, 'build/icons'),
-      },
-      {
-        from: path.resolve(__dirname, 'LICENSE'),
-        to: path.resolve(__dirname, 'build'),
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'static/manifest.json'),
+          to: path.resolve(__dirname, 'build'),
+          transform: transformManifest,
+        },
+        {
+          from: path.resolve(__dirname, 'icons'),
+          to: path.resolve(__dirname, 'build/icons'),
+        },
+        {
+          from: path.resolve(__dirname, 'LICENSE'),
+          to: path.resolve(__dirname, 'build'),
+        },
+      ],
+    }),
   ],
 };
 
