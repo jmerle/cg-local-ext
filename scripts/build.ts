@@ -87,6 +87,10 @@ await Promise.all(
             type: 'module',
           };
 
+          manifest.content_security_policy = {
+            extension_pages: "default-src 'self'; connect-src ws://localhost:53135",
+          };
+
           manifest.browser_specific_settings = {
             gecko: {
               id: '{5aa8ef53-de72-474a-8ef1-03960a8e19f7}',

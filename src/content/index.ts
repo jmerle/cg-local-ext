@@ -26,8 +26,6 @@ function disconnect(): void {
 function onConnected(): void {
   editor.setReadOnly(true);
   editor.setSynchronized(true);
-
-  sendToBackground(ExtensionMessageAction.HidePageAction);
 }
 
 function onDisconnected(): void {
@@ -35,7 +33,6 @@ function onDisconnected(): void {
   editor.setSynchronized(false);
 
   canConnect = true;
-  sendToBackground(ExtensionMessageAction.ShowPageAction);
 }
 
 function init(): void {
@@ -54,8 +51,6 @@ function init(): void {
   });
 
   canConnect = true;
-
-  sendToBackground(ExtensionMessageAction.ShowPageAction);
 }
 
 function dispose(): void {
@@ -76,7 +71,7 @@ function handleMessage(message: ExtensionMessage, sender: Runtime.MessageSender)
     case ExtensionMessageAction.DisposeContent:
       dispose();
       break;
-    case ExtensionMessageAction.PageActionClicked:
+    case ExtensionMessageAction.ActionClicked:
       connect();
       break;
     case ExtensionMessageAction.AppConnected:
