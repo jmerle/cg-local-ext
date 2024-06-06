@@ -1,4 +1,5 @@
-import { browser, Runtime } from 'webextension-polyfill-ts';
+import type { Runtime } from 'webextension-polyfill';
+import { browser } from '../browser';
 import { ExtensionMessage, ExtensionMessageAction, sendToBackground } from '../extension-messaging';
 import { Editor, EditorEventType } from './Editor';
 import { error } from './notifications';

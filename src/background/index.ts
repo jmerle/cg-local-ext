@@ -1,4 +1,5 @@
-import { browser, Runtime, Tabs } from 'webextension-polyfill-ts';
+import type { Runtime, Tabs } from 'webextension-polyfill';
+import { browser } from '../browser';
 import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../extension-messaging';
 import { initApplication } from './application';
 
@@ -11,12 +12,12 @@ function checkTab(tabId: number, changeInfo: any, tab: Tabs.Tab): void {
       sendToContent(tab.id, ExtensionMessageAction.InitContent);
     }
   } else {
-    browser.pageAction.hide(tab.id);
+    browser.action.disable(tab.id);
     sendToContent(tab.id, ExtensionMessageAction.DisposeContent);
   }
 }
 
-function handlePageActionClick(tab: Tabs.Tab): void {
+function onAction(tab: Tabs.Tab): void {
   sendToContent(tab.id, ExtensionMessageAction.PageActionClicked);
 }
 
@@ -25,16 +26,16 @@ function handleMessage(message: ExtensionMessage, sender: Runtime.MessageSender)
 
   switch (message.action) {
     case ExtensionMessageAction.ShowPageAction:
-      browser.pageAction.show(sender.tab.id);
+      browser.action.enable(sender.tab.id);
       break;
     case ExtensionMessageAction.HidePageAction:
-      browser.pageAction.hide(sender.tab.id);
+      browser.action.disable(sender.tab.id);
       break;
   }
 }
 
 browser.tabs.onUpdated.addListener(checkTab);
-browser.pageAction.onClicked.addListener(handlePageActionClick);
+browser.action.onClicked.addListener(onAction);
 browser.runtime.onMessage.addListener(handleMessage);
 
 initApplication();

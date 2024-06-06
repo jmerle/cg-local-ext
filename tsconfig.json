@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
     "strict": true,
     "strictNullChecks": false
   }

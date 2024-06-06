@@ -1,5 +1,5 @@
-import { browser, Runtime } from 'webextension-polyfill-ts';
-import { WebSocketPort } from '../constants';
+import type { Runtime } from 'webextension-polyfill';
+import { browser } from '../browser';
 import { ExtensionMessage, ExtensionMessageAction, sendToContent } from '../extension-messaging';
 import { ApplicationMessage, ApplicationMessageAction } from './application-messaging';
 
@@ -60,7 +60,7 @@ function onClose(event: CloseEvent): void {
 
 function connect(tabId: number): void {
   if (ws === null) {
-    ws = new WebSocket(`ws://localhost:${WebSocketPort}/`);
+    ws = new WebSocket(`ws://localhost:53135/`);
 
     ws.onmessage = onMessage;
     ws.onclose = onClose;

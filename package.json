@@ -6,48 +6,50 @@
   "repository": "https://github.com/jmerle/cg-local-ext",
   "author": "Jasper van Merle",
   "license": "MIT",
+  "type": "module",
   "private": true,
   "scripts": {
-    "build": "webpack --mode=production",
-    "watch": "yarn build --watch",
-    "package": "yarn build && web-ext build -s build/ -a dist/ -o",
-    "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:package",
-    "lint:eslint": "eslint --format codeframe 'src/**' 'scripts/**' webpack.config.ts",
-    "lint:prettier": "prettier-check --ignore-path .gitignore '**/*.{yml,json}'",
-    "lint:package": "yarn build && web-ext lint -s build/ -o text",
-    "fix": "yarn fix:eslint && yarn fix:prettier",
-    "fix:eslint": "yarn lint:eslint --fix",
-    "fix:prettier": "prettier --write --ignore-path .gitignore '**/*.{yml,json}'",
-    "start:firefox": "web-ext run -s build/ --start-url https://www.codingame.com/ --pref devtools.browserconsole.filter.jswarn=false --pref devtools.webconsole.filter.warn=false",
-    "start:chrome": "node scripts/chrome-launch",
-    "dev:firefox": "yarn build && concurrently 'yarn start:firefox' 'yarn watch' -n web-ext,webpack -c blue,yellow --kill-others",
-    "dev:chrome": "yarn build && concurrently 'yarn start:chrome' 'yarn watch' -n chrome,webpack -c blue,yellow --kill-others"
+    "build": "pnpm run \"/^build:.*/\"",
+    "build:chrome": "tsx scripts/build.ts chrome true false",
+    "build:firefox": "tsx scripts/build.ts firefox true false",
+    "watch:chrome": "tsx scripts/build.ts chrome false true",
+    "watch:firefox": "tsx scripts/build.ts firefox false true",
+    "package": "pnpm run \"/^package:.*/\"",
+    "package:chrome": "pnpm build:chrome && web-ext build -s build-chrome/ -a dist/ -o -n {name}-{version}-chrome.zip",
+    "package:firefox": "pnpm build:firefox && web-ext build -s build-firefox/ -a dist/ -o -n {name}-{version}-firefox.zip",
+    "lint": "pnpm run \"/^lint:.*/\"",
+    "lint:eslint": "eslint --format codeframe 'src/**' 'scripts/**'",
+    "lint:prettier": "prettier --check --ignore-path .gitignore '**/*.{ts,js,html,yml,json}'",
+    "lint:tsc": "tsc --noEmit",
+    "lint:package": "pnpm build:firefox && web-ext lint -s build-firefox/ -o text",
+    "fix": "pnpm run --sequential \"/^fix:.*/\"",
+    "fix:eslint": "pnpm lint:eslint --fix",
+    "fix:prettier": "prettier --write --ignore-path .gitignore '**/*.{ts,js,html,yml,json}'",
+    "start:chrome": "tsx scripts/chrome.ts",
+    "start:firefox": "tsx scripts/firefox.ts",
+    "dev:chrome": "rimraf build-chrome && concurrently \"pnpm start:chrome\" \"pnpm watch:chrome\" -n chrome,build -c blue,yellow --kill-others",
+    "dev:firefox": "rimraf build-firefox && concurrently \"pnpm start:firefox\" \"pnpm watch:firefox\" -n firefox,build -c blue,yellow --kill-others"
   },
   "dependencies": {
-    "webextension-polyfill-ts": "0.21.0"
+    "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
-    "@types/copy-webpack-plugin": "^6.0.0",
-    "@types/node": "^14.14.6",
-    "@typescript-eslint/eslint-plugin": "^4.6.1",
-    "@typescript-eslint/parser": "^4.6.1",
-    "chrome-launch": "^1.1.4",
-    "concurrently": "^5.3.0",
-    "copy-webpack-plugin": "^6.2.1",
-    "eslint": "^7.12.1",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eventemitter3": "^4.0.7",
-    "prettier": "^2.1.2",
-    "prettier-check": "^2.0.0",
-    "string-replace-loader": "^2.3.0",
-    "ts-loader": "^8.0.7",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.5",
-    "web-ext": "^5.3.0",
-    "webpack": "^5.3.2",
-    "webpack-cli": "^4.1.0"
+    "@types/node": "^20.14.2",
+    "@types/webextension-polyfill": "^0.10.7",
+    "@typescript-eslint/eslint-plugin": "^7.12.0",
+    "@typescript-eslint/parser": "^7.12.0",
+    "chrome-launcher": "^1.1.1",
+    "concurrently": "^8.2.2",
+    "esbuild": "^0.21.4",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-formatter-codeframe": "^7.32.1",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.3.1",
+    "rimraf": "^5.0.7",
+    "tsx": "^4.12.0",
+    "typescript": "^5.4.5",
+    "web-ext": "^8.0.0"
   },
   "eslintConfig": {
     "root": true,
@@ -57,12 +59,15 @@
       "plugin:import/errors",
       "plugin:import/warnings",
       "plugin:import/typescript",
-      "plugin:prettier/recommended"
+      "prettier"
     ],
     "plugins": [
       "@typescript-eslint"
     ],
     "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "sourceType": "module"
+    },
     "env": {
       "browser": true,
       "node": true
@@ -75,35 +80,16 @@
       "@typescript-eslint/explicit-member-accessibility": "error",
       "@typescript-eslint/no-inferrable-types": "off",
       "@typescript-eslint/no-var-requires": "off",
-      "@typescript-eslint/naming-convention": [
-        "error",
-        {
-          "selector": "default",
-          "format": [
-            "camelCase"
-          ]
-        },
-        {
-          "selector": "variable",
-          "format": [
-            "camelCase",
-            "UPPER_CASE"
-          ]
-        },
-        {
-          "selector": [
-            "typeLike",
-            "enumMember"
-          ],
-          "format": [
-            "PascalCase"
-          ]
-        }
-      ],
       "@typescript-eslint/explicit-function-return-type": [
         "error",
         {
           "allowExpressions": true
+        }
+      ],
+      "@typescript-eslint/explicit-module-boundary-types": [
+        "error",
+        {
+          "allowArgumentsExplicitlyTypedAsAny": true
         }
       ],
       "import/order": [
@@ -115,26 +101,14 @@
           }
         }
       ],
-      "no-constant-condition": [
+      "sort-imports": [
         "error",
         {
-          "checkLoops": false
+          "ignoreCase": true,
+          "ignoreDeclarationSort": true
         }
       ]
     }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,js}": [
-      "eslint --format codeframe --fix"
-    ],
-    "*.{yml,json}": [
-      "prettier --write"
-    ]
   },
   "prettier": {
     "singleQuote": true,
