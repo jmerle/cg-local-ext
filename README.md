@@ -21,8 +21,8 @@ A browser extension which helps in synchronizing the CodinGame IDE with a local 
 The information provided below is meant for Mozilla volunteers.
 
 Software versions used:  
-Node.js: 20.14.0  
-PNPM: 9.2.0
+Node.js: 20.16.0  
+PNPM: 9.11.0
 
 Third-party libraries that can be found in the extension:
 - [eventemitter3 5.0.1](https://github.com/primus/eventemitter3/blob/5.0.1/index.js)

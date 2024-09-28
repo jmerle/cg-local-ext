@@ -61,7 +61,7 @@ function dispose(): void {
   }
 }
 
-function handleMessage(message: ExtensionMessage, sender: Runtime.MessageSender): void {
+async function handleMessage(message: ExtensionMessage | any, sender: Runtime.MessageSender): Promise<void> {
   if (sender.tab) return;
 
   switch (message.action) {
