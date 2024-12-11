@@ -75,7 +75,7 @@ function connect(tabId: number): void {
   }
 }
 
-function keepAlive() {
+function keepAlive(): void {
   const keepAliveIntervalId = setInterval(
     () => {
       if (ws) {
@@ -85,7 +85,7 @@ function keepAlive() {
       }
     },
     // Set the interval to 20 seconds to prevent the service worker from becoming inactive.
-    20 * 1000 
+    20 * 1000,
   );
 }
 
