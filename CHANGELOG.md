@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.2.1](https://github.com/jmerle/cg-local-ext/releases/tag/1.2.1) (2024-12-16)
+- Fixed automatic disconnection after 30 seconds of being connected to the CG Local desktop application (thanks [@patrickmoore](https://github.com/patrickmoore))
+
 ## [1.2.0](https://github.com/jmerle/cg-local-ext/releases/tag/1.2.0) (2024-09-28)
 - Updated to Manifest V3. As a result, there are now separate distributions for Chrome and Firefox. The code of both is the same, but the extension manifest differs. If you're installing via the Chrome Web Store or Mozilla's AMO this will not affect you. If you install the extension manually you'll need to make sure you download the correct distribution, the Chrome version is not compatible with Firefox and vice-versa.
 
