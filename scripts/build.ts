@@ -38,7 +38,7 @@ await Promise.all(
           author: packageJson.author,
           homepage_url: packageJson.repository,
 
-          permissions: ['tabs'],
+          permissions: ['tabs', 'storage'],
 
           icons: {
             '16': 'icons/icon-16.png',

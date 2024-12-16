@@ -75,6 +75,20 @@ function connect(tabId: number): void {
   }
 }
 
+function keepAlive(): void {
+  const keepAliveIntervalId = setInterval(
+    () => {
+      if (ws) {
+        browser.storage.session.set({ keepAlive: new Date().getTime() });
+      } else {
+        clearInterval(keepAliveIntervalId);
+      }
+    },
+    // Set the interval to 20 seconds to prevent the service worker from becoming inactive.
+    20 * 1000,
+  );
+}
+
 function send(action: ApplicationMessageAction, payload: any = {}): void {
   ws.send(JSON.stringify({ action, payload }));
 }
@@ -85,6 +99,7 @@ async function handleMessage(message: ExtensionMessage | any, sender: Runtime.Me
   switch (message.action) {
     case ExtensionMessageAction.ConnectApp:
       connect(sender.tab.id);
+      keepAlive();
       break;
     case ExtensionMessageAction.DisconnectApp:
       if (connectedTabId === sender.tab.id) {
