@@ -79,7 +79,7 @@ function keepAlive(): void {
   const keepAliveIntervalId = setInterval(
     () => {
       if (ws) {
-        ws.send('keepalive');
+        browser.storage.session.set({ keepAlive: new Date().getTime() });
       } else {
         clearInterval(keepAliveIntervalId);
       }
